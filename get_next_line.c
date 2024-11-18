@@ -126,5 +126,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	ft_strlcpy(new, s1, len_s1 + 1);
 	ft_strlcat(new, s2, (len_s1 + len_s2) + 1);
+	free((char *)s1);
 	return (new);
 }

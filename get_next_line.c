@@ -1,51 +1,47 @@
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 1024
 #endif
 
-size_t  ft_strlen(char *str);
-char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_strlcat(char *dst, const char *src, size_t size);
-char    *read_file(int  fd);
-char	*get_next_line(int fd);
-char	*ft_strdup(const char *s);
-
-
-/*int main()
+int main()
 {
 	int		fd;
+	int 	bytes_lidos;
 	char	*result;
 
 	fd = open("teste.txt", O_RDONLY);
 	if (fd < 0)
 		return (0);
-	result = get_next_line(fd);
-	printf("%s\n", result);
-	free(result);
-}*/
+	while((result = get_next_line(fd)) != NULL)
+	{
+		printf("%s\n", result);
+		//free(result);
+	}
+	close(fd);
+	return (0);
+}
 
  char *get_next_line(int fd)
 {
-	static char *buffer;
+	char	*buffer;
 	char    *line;
 	char    *temp;
 	int     i;
 
 	i = 0;
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_file(fd);
+	if (buffer == NULL || *buffer == '\0')
+		return (NULL);
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	line = malloc(sizeof(char) * (i + 2));
-	if (!line)
-		return (NULL);
-	temp = ft_strdup(buffer + i + 1);
-	if (!temp)
+	if (line == NULL)
 		return (NULL);
 	ft_strlcpy(line, buffer, i + 2);
+	temp = ft_strdup(buffer + i + 1);
 	free(buffer);
 	buffer = temp;
 	return (line);
@@ -67,6 +63,10 @@ char    *read_file(int  fd) // ESTA FUNCAO E SOMENTE UM READ E RETORNA UMA STRIN
 	{
 		buffer[bytes_lidos] = '\0';
 		cache = ft_strjoin(cache, buffer);
+		if (cache == NULL)
+		{	free(buffer);
+			return (NULL);
+		}
 	}
 	free(buffer);
 	return (cache);

@@ -1,9 +1,23 @@
-# include "get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmendes <anmendes@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/23 16:46:10 by anmendes          #+#    #+#             */
+/*   Updated: 2024/11/23 17:14:34 by anmendes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line.h"
 
 char	*ft_strdup(const char *s)
 {
 	char	*cpy;
-
+	
+	if (s == NULL)
+		return (NULL);
 	cpy = (char *)malloc(sizeof(char) * ft_strlen((char *)s) + 1);
 	if (cpy == NULL)
 		return (NULL);
@@ -11,15 +25,16 @@ char	*ft_strdup(const char *s)
 	return (cpy);
 }
 
-size_t ft_strlen(char *str)
+size_t	ft_strlen(char *str)
 {
-	size_t i = 0;
+	size_t	i;
 
-	if (!str)
+	if (str == NULL)
 		return (0);
+	i = 0;
 	while (str[i])
 		i++;
-	return i;
+	return (i);
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
@@ -29,6 +44,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	size_t	i;
 	size_t	j;
 
+	if (dst == NULL || src == NULL)
+		return (0);
 	len_s = ft_strlen((char *)src);
 	len_d = ft_strlen((char *)dst);
 	if (size <= len_d)
@@ -68,7 +85,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*new;
 	size_t	len_s1;
 	size_t	len_s2;
- 	
+
 	if (s1 == NULL && s2 == NULL)
 		return (NULL);
 	len_s1 = ft_strlen((char *)s1);

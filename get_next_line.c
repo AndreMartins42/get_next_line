@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmendes <anmendes@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/23 16:45:52 by anmendes          #+#    #+#             */
+/*   Updated: 2024/11/23 17:10:19 by anmendes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 100
+# define BUFFER_SIZE 1
 #endif
 
-int main()
+/* int main()
 {
 	int		fd;
 	char	*result;
@@ -19,7 +31,7 @@ int main()
 	}
 	close(fd);
 	return (0);
-}
+} */
 
 char	*get_next_line(int fd)
 {
@@ -35,10 +47,11 @@ char	*get_next_line(int fd)
 	buffer = ft_next(buffer);
 	return (line);
 }
+
 char	*ft_line(char *buffer)
 {
-	char    *line;
-	int     i;
+	char	*line;
+	int		i;
 
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
@@ -52,8 +65,8 @@ char	*ft_line(char *buffer)
 
 char	*ft_next(char *buffer)
 {
-	char    *next;
-	int     i;
+	char	*next;
+	int		i;
 
 	if (buffer == NULL)
 		return (NULL);
@@ -66,14 +79,16 @@ char	*ft_next(char *buffer)
 		return (NULL);
 	}
 	next = ft_strdup(buffer + i + 1);
+	if (next == NULL)
+		return (NULL);
 	free(buffer);
 	return (next);
 }
-char    *read_file(int  fd, char *cache)
+
+char	*read_file(int fd, char *cache)
 {
-	// preciso pegar todo o TXT e alocar em uma vari'avel, para ai sim verificar as linhas e trabalhar em cima dos \n"
-	ssize_t bytes_lidos;
-	char    *buffer;
+	ssize_t	bytes_lidos;
+	char	*buffer;
 	char	*temp;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
@@ -81,13 +96,32 @@ char    *read_file(int  fd, char *cache)
 		return (NULL);
 	while ((bytes_lidos = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
+		
 		buffer[bytes_lidos] = '\0';
 		temp = ft_strjoin(cache, buffer);
+		if (temp == NULL)
+			return (NULL);
 		free(cache);
 		cache = temp;
 		if (ft_strchr(buffer, '\n'))
-			break;
+			break ;
 	}
 	free(buffer);
 	return (cache);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	char	temp;
+
+	temp = (char)c;
+	while (*s)
+	{
+		if (*s == temp)
+			return ((char *)s);
+		s++;
+	}
+	if (temp == '\0')
+		return ((char *)s);
+	return (NULL);
 }

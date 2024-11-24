@@ -6,25 +6,26 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:45:52 by anmendes          #+#    #+#             */
-/*   Updated: 2024/11/24 08:03:32 by marvin           ###   ########.fr       */
+/*   Updated: 2024/11/24 08:36:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 5
 #endif
 
-int main()
+
+int main(void)
 {
-	int		fd;
-	char	*result;
+	int	fd;
+	char *result;
 
 	fd = open("teste.txt", O_RDONLY);
 	if (fd < 0)
 		return (0);
-	while((result = get_next_line(fd)) != NULL)
+	while ((result = get_next_line(fd))!= NULL)
 	{
 		printf("%s", result);
 		free(result);

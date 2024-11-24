@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anmendes <anmendes@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:45:52 by anmendes          #+#    #+#             */
-/*   Updated: 2024/11/23 17:10:19 by anmendes         ###   ########.fr       */
+/*   Updated: 2024/11/24 08:03:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define BUFFER_SIZE 1
 #endif
 
-/* int main()
+int main()
 {
 	int		fd;
 	char	*result;
@@ -31,7 +31,7 @@
 	}
 	close(fd);
 	return (0);
-} */
+}
 
 char	*get_next_line(int fd)
 {
@@ -69,15 +69,12 @@ char	*ft_next(char *buffer)
 	int		i;
 
 	if (buffer == NULL)
-		return (NULL);
+		return (free(buffer), NULL);
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (buffer[i] == '\0')
-	{
-		free(buffer);
-		return (NULL);
-	}
+		return (free(buffer), NULL);
 	next = ft_strdup(buffer + i + 1);
 	if (next == NULL)
 		return (NULL);
@@ -94,26 +91,28 @@ char	*read_file(int fd, char *cache)
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (buffer == NULL)
 		return (NULL);
-	while ((bytes_lidos = read(fd, buffer, BUFFER_SIZE)) > 0)
+	bytes_lidos = read(fd, buffer, BUFFER_SIZE);
+	while (bytes_lidos > 0)
 	{
-		
 		buffer[bytes_lidos] = '\0';
 		temp = ft_strjoin(cache, buffer);
 		if (temp == NULL)
-			return (NULL);
+			return (free(cache), free(buffer), NULL);
 		free(cache);
 		cache = temp;
 		if (ft_strchr(buffer, '\n'))
 			break ;
+		bytes_lidos = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
 	return (cache);
 }
-
 char	*ft_strchr(const char *s, int c)
 {
 	char	temp;
 
+	if (s == NULL)
+		return (NULL);
 	temp = (char)c;
 	while (*s)
 	{

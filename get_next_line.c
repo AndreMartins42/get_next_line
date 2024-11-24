@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anmendes <anmendes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/23 16:45:52 by anmendes          #+#    #+#             */
-/*   Updated: 2024/11/24 08:36:38 by marvin           ###   ########.fr       */
+/*   Created: 2024/11/24 12:18:54 by anmendes          #+#    #+#             */
+/*   Updated: 2024/11/24 14:43:36 by anmendes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 5
+# define BUFFER_SIZE 10
 #endif
 
-
-int main(void)
+/* int main(void)
 {
 	int	fd;
 	char *result;
@@ -32,7 +31,7 @@ int main(void)
 	}
 	close(fd);
 	return (0);
-}
+}  */
 
 char	*get_next_line(int fd)
 {
@@ -89,6 +88,8 @@ char	*read_file(int fd, char *cache)
 	char	*buffer;
 	char	*temp;
 
+	/*if (!cache)
+		cache = calloc(1, 1);*/
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (buffer == NULL)
 		return (NULL);
@@ -105,10 +106,10 @@ char	*read_file(int fd, char *cache)
 			break ;
 		bytes_lidos = read(fd, buffer, BUFFER_SIZE);
 	}
-	free(buffer);
-	return (cache);
+	return (free(buffer), cache);
 }
-char	*ft_strchr(const char *s, int c)
+
+char	*ft_strchr(char *s, int c)
 {
 	char	temp;
 

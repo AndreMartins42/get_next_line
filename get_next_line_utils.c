@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anmendes <anmendes@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 08:03:26 by marvin            #+#    #+#             */
-/*   Updated: 2024/11/24 08:03:27 by marvin           ###   ########.fr       */
+/*   Updated: 2024/11/24 14:43:16 by anmendes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "get_next_line.h"
+#include "get_next_line.h"
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup(char *s)
 {
 	char	*cpy;
-	size_t	len_s;
-	
+	int		len_s;
+
 	if (s == NULL)
 		return (NULL);
-	len_s = ft_strlen((char *)s);
+	len_s = ft_strlen(s);
 	cpy = (char *)malloc(sizeof(char) * len_s + 1);
 	if (cpy == NULL)
 		return (NULL);
@@ -27,26 +27,27 @@ char	*ft_strdup(const char *s)
 	return (cpy);
 }
 
-size_t ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-	size_t i = 0;
+	int	i;
 
-	if (str == NULL)
+	i = 0;
+	if (!str)
 		return (0);
 	while (str[i])
 		i++;
-	return i;
+	return (i);
 }
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+int	ft_strlcat(char *dst, char *src, int size)
 {
-	size_t	len_s;
-	size_t	len_d;
-	size_t	i;
-	size_t	j;
+	int	len_s;
+	int	len_d;
+	int	i;
+	int	j;
 
-	len_s = ft_strlen((char *)src);
-	len_d = ft_strlen((char *)dst);
+	len_s = ft_strlen(src);
+	len_d = ft_strlen(dst);
 	if (size <= len_d)
 		return (len_s + size);
 	j = 0;
@@ -61,12 +62,12 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	return (len_s + len_d);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+int	ft_strlcpy(char *dst, char *src, int size)
 {
-	size_t	i;
-	size_t	len_src;
+	int	i;
+	int	len_src;
 
-	len_src = ft_strlen((char *)src);
+	len_src = ft_strlen(src);
 	if (dst == NULL || src == NULL)
 		return (0);
 	if (size == 0)
@@ -81,23 +82,24 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (len_src);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*new;
-	size_t	len_s1;
-	size_t	len_s2;
- 	
-	if (s1 == NULL && s2 == NULL)
+	int		len_s1;
+	int		len_s2;
+
+	if (!s1)
+		s1 = calloc(1, 1);
+	if (s1 == NULL || s2 == NULL)
 		return (NULL);
-	len_s1 = ft_strlen((char *)s1);
-	len_s2 = ft_strlen((char *)s2);
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	if (len_s1 + len_s2 == 0)
+		return (NULL);
 	new = (char *)malloc(sizeof(char) * (len_s1 + len_s2) + 1);
 	if (new == NULL)
-	{
-		free((char *)s1);
-		return (NULL);
-	}
+		return (free(NULL), s1);
 	ft_strlcpy(new, s1, len_s1 + 1);
 	ft_strlcat(new, s2, (len_s1 + len_s2) + 1);
-	return (new);
+	return (free(s1), new);
 }

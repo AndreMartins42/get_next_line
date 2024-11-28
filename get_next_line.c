@@ -1,22 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: anmendes <anmendes@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/24 12:18:54 by anmendes          #+#    #+#             */
-/*   Updated: 2024/11/24 14:43:36 by anmendes         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 10
 #endif
 
-/* int main(void)
+/*int main(void)
 {
 	int	fd;
 	char *result;
@@ -31,12 +19,11 @@
 	}
 	close(fd);
 	return (0);
-}  */
-
-char	*get_next_line(int fd)
+}*/
+char *get_next_line(int fd)
 {
-	static char	*buffer;
-	char		*line;
+	static char *buffer;
+	char *line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -53,6 +40,8 @@ char	*ft_line(char *buffer)
 	char	*line;
 	int		i;
 
+	if (!buffer)
+		return (NULL);
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
@@ -63,18 +52,19 @@ char	*ft_line(char *buffer)
 	return (line);
 }
 
-char	*ft_next(char *buffer)
-{
+char	*ft_next(char *buffer) {
 	char	*next;
 	int		i;
 
 	if (buffer == NULL)
-		return (free(buffer), NULL);
+		return (NULL);
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	if (buffer[i] == '\0')
-		return (free(buffer), NULL);
+	if (buffer[i] == '\0') {
+		free(buffer);
+		return (NULL);
+	}
 	next = ft_strdup(buffer + i + 1);
 	if (next == NULL)
 		return (NULL);
@@ -82,47 +72,42 @@ char	*ft_next(char *buffer)
 	return (next);
 }
 
-char	*read_file(int fd, char *cache)
-{
+char	*read_file(int fd, char *cache) {
 	ssize_t	bytes_lidos;
 	char	*buffer;
 	char	*temp;
 
-	/*if (!cache)
-		cache = calloc(1, 1);*/
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (buffer == NULL)
+	if (!buffer) 
 		return (NULL);
 	bytes_lidos = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_lidos > 0)
-	{
+	while (bytes_lidos > 0) {
 		buffer[bytes_lidos] = '\0';
 		temp = ft_strjoin(cache, buffer);
-		if (temp == NULL)
-			return (free(cache), free(buffer), NULL);
+		if (temp == NULL) {
+			free(buffer);
+			free(cache);
+			return (NULL);
+		}
 		free(cache);
 		cache = temp;
 		if (ft_strchr(buffer, '\n'))
-			break ;
+			break;
 		bytes_lidos = read(fd, buffer, BUFFER_SIZE);
 	}
-	return (free(buffer), cache);
+	free(buffer); 
+	return (cache);
 }
 
-char	*ft_strchr(char *s, int c)
-{
-	char	temp;
-
+char	*ft_strchr(char *s, int c) {
 	if (s == NULL)
 		return (NULL);
-	temp = (char)c;
-	while (*s)
-	{
-		if (*s == temp)
-			return ((char *)s);
+	while (*s) {
+		if (*s == (char)c)
+			return (s);
 		s++;
 	}
-	if (temp == '\0')
-		return ((char *)s);
+	if (c == '\0')
+		return (s);
 	return (NULL);
 }
